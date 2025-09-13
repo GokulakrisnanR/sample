@@ -1,0 +1,26 @@
+.top-navbar {
+  background-color: #d90032; /* darker pink/red */
+  font-size: 12px;
+  padding: 5px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.top-navbar .left,
+.top-navbar .right {
+  display: flex;
+  gap: 20px;
+  color: white;
+}
+
+.top-navbar .left span {
+  font-weight: bold;
+}
+
+.top-navbar .right .icon {
+  width: 16px;
+  height: 16px;
+  margin-right: 5px;
+  vertical-align: middle;
+}

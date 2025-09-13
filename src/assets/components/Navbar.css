@@ -1,0 +1,58 @@
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  background-color: #E40046; /* Snapdeal red */
+  color: white;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  font-family: Arial, sans-serif;
+}
+
+/* Logo */
+.navbar-logo {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+/* Search */
+.navbar-search-container {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  max-width: 500px; /* restrict width like Snapdeal */
+  margin: 0 20px;
+}
+
+.navbar-search {
+  flex: 1;
+  padding: 6px 10px;
+  border-radius: 4px 0 0 4px;
+  border: none;
+  font-size: 14px;
+}
+
+.search-button {
+  padding: 6px 12px;
+  background-color: #333; /* dark grey */
+  color: white;
+  border: none;
+  border-radius: 0 4px 4px 0;
+  cursor: pointer;
+}
+
+/* Right Icons */
+.navbar-icons {
+  display: flex;
+  gap: 20px;
+}
+
+.navbar-icons .icon {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  font-size: 14px;
+}

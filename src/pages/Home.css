@@ -1,0 +1,15 @@
+.home-container {
+  display: flex;
+  padding: 20px;
+}
+
+.main-content {
+  margin-left: 201px;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}

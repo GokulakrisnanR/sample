@@ -1,0 +1,83 @@
+/* Sidebar Container */
+.sidebar {
+  width: 201px; /* explicit width */
+  height: 670px; /* explicit height */
+  background-color: #fff;
+  border: 1px solid #ddd;
+  padding: 10px 0;
+  position: sticky;
+  top: 120px; /* adjust if header height changes */
+  z-index: 20; /* keeps sidebar above content but below popup */
+  overflow-y: visible; /* allow popup to overflow */
+}
+
+/* Category in sidebar */
+.category {
+  padding: 10px 20px;
+  position: relative; /* for popup */
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.category:hover {
+  background-color: #f8f8f8;
+}
+
+/* Category Title */
+.category-title {
+  font-weight: bold;
+  font-size: 14px;
+  color: #333;
+}
+
+/* Subcategory Popup */
+.subcategory-popup {
+  position: absolute;
+  left: 201px; /* aligns right of sidebar */
+  top: 0;
+  width: 500px; /* fixed width for popup */
+  background-color: #fff;
+  border: 1px solid #ddd;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 20px;
+  padding: 15px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  z-index: 2000; /* higher than banner arrows */
+  overflow: visible; /* make content fully visible */
+}
+
+/* Each column */
+.subcategory-column {
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid rgba(0,0,0,0.1); /* vertical line */
+  padding-right: 15px;
+}
+
+.subcategory-column:last-child {
+  border-right: none;
+}
+
+/* Subcategory Heading */
+.subcategory-heading {
+  font-weight: 600;
+  font-size: 13px;
+  color: #333;
+  margin-bottom: 8px;
+  border-bottom: 1px solid rgba(0,0,0,0.1); /* horizontal separator */
+  padding-bottom: 5px;
+}
+
+/* Subcategory Item */
+.subcategory-item {
+  font-size: 12px;
+  color: #555;
+  padding: 3px 0;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.subcategory-item:hover {
+  color: #E40046; /* Snapdeal accent */
+}
