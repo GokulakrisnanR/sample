@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Sidebar.css";
 
 const categories = [
@@ -23,12 +23,7 @@ const categories = [
       },
       {
         heading: "Cameras",
-        items: [
-          "DSLR Cameras",
-          "Mirrorless Cameras",
-          "Action Cameras",
-          "Drones",
-        ],
+        items: ["DSLR Cameras", "Mirrorless Cameras", "Action Cameras", "Drones"],
       },
     ],
   },
@@ -54,6 +49,21 @@ const categories = [
 
 const Sidebar = () => {
   const [activeIndex, setActiveIndex] = useState(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Check for mobile view
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 992);
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const handleCategoryClick = (index) => {
+    if (isMobile) {
+      setActiveIndex(activeIndex === index ? null : index);
+    }
+  };
 
   return (
     <div className="sidebar">
@@ -61,10 +71,20 @@ const Sidebar = () => {
         <div
           key={index}
           className="category"
-          onMouseEnter={() => setActiveIndex(index)}
-          onMouseLeave={() => setActiveIndex(null)}
+          onMouseEnter={() => !isMobile && setActiveIndex(index)}
+          onMouseLeave={() => !isMobile && setActiveIndex(null)}
         >
-          <div className="category-title">{cat.title}</div>
+          <div
+            className="category-title"
+            onClick={() => handleCategoryClick(index)}
+          >
+            {cat.title}
+            {isMobile && (
+              <span style={{ float: "right" }}>
+                {activeIndex === index ? "−" : "+"}
+              </span>
+            )}
+          </div>
 
           {activeIndex === index && (
             <div className="subcategory-popup">

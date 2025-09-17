@@ -1,0 +1,104 @@
+.product-slider-container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  padding: 10px 40px;
+  box-sizing: border-box;
+}
+
+.product-slider {
+  display: flex;
+  transition: transform 0.4s ease-in-out;
+}
+
+.product-slide {
+  flex: 0 0 200px;
+  margin-right: 20px;
+}
+
+.product-slide:last-child {
+  margin-right: 0;
+}
+
+/* Product Card */
+.product-slide > div {
+  background: #fff;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  border: none;
+  text-align: center;
+  padding: 10px;
+}
+
+.product-slide > div:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+  border: 1px solid #e53935;
+}
+
+.product-slide img {
+  width: 100%;
+  border-radius: 6px;
+}
+
+.product-name {
+  font-size: 14px;
+  margin: 8px 0;
+  color: #333;
+}
+
+.price {
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+.price .old {
+  text-decoration: line-through;
+  color: #777;
+  margin-right: 5px;
+}
+
+.price .new {
+  color: #e53935;
+  font-weight: 600;
+  margin-right: 5px;
+}
+
+.price .off {
+  color: green;
+  font-weight: 600;
+}
+
+/* Slider Arrows */
+.slider-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 50%;
+  width: 38px;
+  height: 38px;
+  cursor: pointer;
+  z-index: 10;
+  font-size: 18px;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.slider-arrow.left {
+  left: 5px;
+}
+
+.slider-arrow.right {
+  right: 5px;
+}
+
+.slider-arrow:hover {
+  background: #e53935;
+  color: #fff;
+  border-color: #e53935;
+}

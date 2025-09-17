@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import "./Carousel.css";
-import "../images/banner/banner1.avif";
 
 import banner1 from "../images/banner/banner1.avif";
 import banner2 from "../images/banner/banner2.avif";
@@ -28,22 +27,35 @@ const Carousel = () => {
     setCurrent((prev) => (prev === 0 ? banners.length - 1 : prev - 1));
   };
 
+  const goToSlide = (index) => {
+    setCurrent(index);
+  };
+
   return (
     <div className="carousel">
       <button className="arrow left" onClick={prevSlide}>
         &#10094;
       </button>
+
       {banners.map((banner, index) => (
-        <div
-          key={index}
-          className={index === current ? "slide active" : "slide"}
-        >
-          {index === current && <img src={banner} alt={`banner${index}`} />}
+        <div key={index} className={index === current ? "slide active" : "slide"}>
+          <img src={banner} alt={`banner${index}`} />
         </div>
       ))}
+
       <button className="arrow right" onClick={nextSlide}>
         &#10095;
       </button>
+
+      <div className="dots">
+        {banners.map((_, index) => (
+          <span
+            key={index}
+            className={index === current ? "dot active" : "dot"}
+            onClick={() => goToSlide(index)}
+          ></span>
+        ))}
+      </div>
     </div>
   );
 };
