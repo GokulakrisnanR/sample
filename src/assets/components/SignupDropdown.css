@@ -1,73 +1,12 @@
-/* Navbar container */
-.navbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 20px;
-  background-color: #E40046; /* Snapdeal red */
-  color: white;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  font-family: Arial, sans-serif;
-}
-
-/* Logo */
-.navbar-logo {
-  font-size: 24px;
-  font-weight: bold;
-  color: white;
-}
-
-/* Search */
-.navbar-search-container {
-  display: flex;
-  align-items: center;
-  flex: 1;
-  max-width: 500px;
-  margin: 0 20px;
-}
-
-.navbar-search {
-  flex: 1;
-  padding: 6px 10px;
-  border-radius: 4px 0 0 4px;
-  border: none;
-  font-size: 14px;
-}
-
-.search-button {
-  padding: 6px 12px;
-  background-color: #333;
-  color: white;
-  border: none;
-  border-radius: 0 4px 4px 0;
-  cursor: pointer;
-}
-
-/* Right icons */
-.navbar-icons {
-  display: flex;
-  gap: 0; /* borders create gap */
-}
-
-/* Signin and Cart individual items */
-.navbar-icon {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 12px;
-  cursor: pointer;
-  border-left: 1px solid rgba(255,255,255,0.4);
+/* Parent container */
+.signin {
   position: relative;
+  display: inline-block;
+  cursor: pointer;
 }
 
-.navbar-icon:first-child {
-  border-left: none;
-}
-
-/* Dropdown */
-.signin .signup-dropdown {
+/* Dropdown hidden by default */
+.signup-dropdown {
   display: none;
   position: absolute;
   top: 100%;
@@ -83,7 +22,7 @@
   font-family: Arial, sans-serif;
 }
 
-/* Show dropdown on hover */
+/* Show dropdown when hovering Sign In or dropdown itself */
 .signin:hover .signup-dropdown,
 .signup-dropdown:hover {
   display: block;
@@ -97,21 +36,21 @@
 }
 
 .dropdown-link {
-  color: #ffffff;
+  color: #333333; /* default color */
   font-size: 14px;
   font-weight: 600;
-  padding: 8px 10px;
+  padding: 6px 8px;
   cursor: pointer;
   border-radius: 4px;
-  background-color: #333333;
   transition: background-color 0.2s ease;
 }
 
 .dropdown-link:hover {
-  background-color: #2e2e2e;
+  background-color: #404040; /* hover background */
+  color: #ffffff;
 }
 
-/* Divider */
+/* Horizontal divider */
 .dropdown-horizontal-divider {
   height: 1px;
   background-color: #404040;
@@ -142,9 +81,6 @@
   box-sizing: border-box;
   transition: background-color 0.2s ease;
 }
-.navbar-icon.signin:hover{
-  background-color: #333333;
-}
 
 .register-btn {
   background-color: #444444;
@@ -164,7 +100,7 @@
   background-color: #b01834;
 }
 
-/* Responsive */
+/* Responsive for small screens */
 @media (max-width: 420px) {
   .signup-dropdown {
     right: 8px;

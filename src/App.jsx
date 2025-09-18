@@ -6,6 +6,8 @@ import Cart from "./pages/Cart.jsx";
 import "./App.css";
 import Navbar from "./assets/components/Navbar.jsx";
 import TopNavbar from "./assets/components/TopNavbar.jsx";
+import Login from "./pages/Login.jsx";
+import Signup from "./pages/Signup.jsx";
 
 const App = () => {
   return (
@@ -16,6 +18,9 @@ const App = () => {
       <Routes>
         
         <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+
         <Route path="/products" element={<Products />} />
         <Route path="/cart" element={<Cart />} />
       </Routes>
