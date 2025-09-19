@@ -1,41 +1,59 @@
 import React, { useState } from "react";
-import "../assets/components/Auth/AuthModal.css";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import "./Login.css"; // separate CSS file
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    console.log("Login with:", { email, password });
-    // Later: connect with backend API
+    try {
+      const res = await axios.get("http://localhost:8080/api/users");
+      const user = res.data.find(
+        (u) => u.email === email && u.password === password
+      );
+
+      if (user) {
+        alert(`Welcome ${user.name}! Role: ${user.role || "USER"}`);
+        navigate("/products");
+      } else {
+        alert("Invalid credentials");
+      }
+    } catch (err) {
+      console.error("Error fetching users:", err);
+      alert("Something went wrong. Try again.");
+    }
   };
 
   return (
-    <div className="auth-container">
-      <div className="auth-card">
-        <h2>Login</h2>
-        <form onSubmit={handleSubmit}>
+    <div className="login-container">
+      <h2>Login</h2>
+      <form onSubmit={handleLogin} className="login-form">
+        <div className="form-group">
+          <label>Email:</label>
           <input
             type="email"
-            placeholder="Enter your email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
           />
+        </div>
+        <div className="form-group">
+          <label>Password:</label>
           <input
             type="password"
-            placeholder="Enter your password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-          <button type="submit">Login</button>
-        </form>
-        <p>
-          Don’t have an account? <a href="/signup">Signup</a>
-        </p>
-      </div>
+        </div>
+        <button type="submit" className="login-button">
+          Login
+        </button>
+      </form>
     </div>
   );
 };

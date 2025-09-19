@@ -7,21 +7,27 @@ const Modal = ({ isOpen, onClose, title, children }) => {
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        {/* Header with Title and Close Button */}
         <div className="modal-header">
-          <h2>{title}</h2>
+          <h2 className="modal-title">{title}</h2>
           <button className="modal-close" onClick={onClose}>
             &times;
           </button>
         </div>
 
-        {/* Heading like Snapdeal */}
+        {/* Main Heading */}
         <div className="modal-heading">
-          login/sign up on snapdeal
-        </div>
-        <div className="modal-subheading">
-          Please provide your Email and Password to {title} on Snapdeal
+          {title === "Login" ? "Welcome Back!" : "Create Your Account"}
         </div>
 
+        {/* Subheading */}
+        <div className="modal-subheading">
+          {title === "Login"
+            ? "Enter your credentials to login to Snapdeal"
+            : "Fill in your details to register on Snapdeal"}
+        </div>
+
+        {/* Body content (form will be passed as children) */}
         <div className="modal-body">{children}</div>
       </div>
     </div>

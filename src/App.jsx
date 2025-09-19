@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home.jsx";
 import Products from "./pages/Products.jsx";
@@ -8,20 +8,69 @@ import Navbar from "./assets/components/Navbar.jsx";
 import TopNavbar from "./assets/components/TopNavbar.jsx";
 import Login from "./pages/Login.jsx";
 import Signup from "./pages/Signup.jsx";
+import axios from "axios";
+import ApiTest from "./ApiTest.jsx";
+import AdminPage from "./pages/Admin.jsx";
+
 
 const App = () => {
-  return (
- 
-    <Router>
-         <TopNavbar/>
-         <Navbar/>
-      <Routes>
-        
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
+  const [users, setUsers] = useState([]);
+  const [products, setProducts] = useState([]);
 
-        <Route path="/products" element={<Products />} />
+  // Fetch users (GET)
+  const fetchUsers = async () => {
+    try {
+      const res = await axios.get("http://localhost:8080/api/users");
+      setUsers(res.data);
+    } catch (error) {
+      console.error("Error fetching users:", error);
+    }
+  };
+
+  // Fetch products (GET)
+  const fetchProducts = async () => {
+    try {
+      const res = await axios.get("http://localhost:8080/api/products");
+      setProducts(res.data);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchUsers();
+    fetchProducts();
+  }, []);
+
+  // Optional: Function to register new user (POST)
+  const registerUser = async (userData) => {
+    try {
+      const res = await axios.post("http://localhost:8080/api/users", userData);
+      console.log("User registered:", res.data);
+      fetchUsers(); // Refresh the user list
+    } catch (error) {
+      console.error("Error registering user:", error);
+    }
+  };
+
+  return (
+    <Router>
+      <TopNavbar />
+      <Navbar />
+      <Routes>
+                      <Route path="/apitest" element={<ApiTest />} />
+                      <Route path="/admin" element={<AdminPage />} />
+
+        <Route
+          path="/"
+          element={<Home users={users} products={products} />}
+        />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup registerUser={registerUser} />} />
+        <Route
+          path="/products"
+          element={<Products products={products} />}
+        />
         <Route path="/cart" element={<Cart />} />
       </Routes>
     </Router>
