@@ -1,17 +1,20 @@
+// src/assets/components/Navbar.jsx
 import React, { useState } from "react";
-import axios from "axios";
 import { FaUserAlt, FaShoppingCart } from "react-icons/fa";
 import SignupDropdown from "./SignupDropdown";
 import Modal from "./Modal";
+import { loginUser, registerUser } from "../../services/AuthService";
 import "./Navbar.css";
+import { useNavigate } from "react-router-dom";  // ✅ add this
 
-const Navbar = () => {
+const Navbar = ({ loggedUser, setLoggedUser }) => {
   const [modalOpen, setModalOpen] = useState(false);
-  const [modalType, setModalType] = useState(""); // "login" or "register"
+  const [modalType, setModalType] = useState(""); 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
-  const [loggedUser, setLoggedUser] = useState(null); // Store logged-in user
+
+  const navigate = useNavigate();
 
   const openModal = (type) => {
     setModalType(type);
@@ -26,44 +29,36 @@ const Navbar = () => {
     setName("");
   };
 
-  // Handle Login
+  // ✅ Handle Login
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.get("http://localhost:8080/api/users");
-      const user = res.data.find(
-        (u) => u.email === email && u.password === password
-      );
-
+      const user = await loginUser(email, password);
       if (user) {
-        setLoggedUser(user); // Save user info
+        setLoggedUser(user); // update App.jsx state
+        alert(`Welcome ${user.name}! Role: ${user.role || "USER"}`);
         closeModal();
 
+        // Navigate based on role
         if (user.role === "ADMIN") {
-          alert(`Welcome Admin ${user.name}!`);
-          window.location.href = "/admin"; // Admin page
+          navigate("/admin");
         } else {
-          alert(`Welcome ${user.name}!`);
-          window.location.href = "/"; // Stay on Home page
+          navigate("/");
         }
       } else {
         alert("Invalid email or password");
       }
     } catch (err) {
       console.error("Login error:", err);
+      alert("Something went wrong. Please try again.");
     }
   };
 
-  // Handle Register
+  // ✅ Handle Register
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:8080/api/users", {
-        name,
-        email,
-        password,
-        role: null,
-      });
+      await registerUser(name, email, password);
       alert("User registered successfully!");
       closeModal();
     } catch (err) {
@@ -71,12 +66,17 @@ const Navbar = () => {
     }
   };
 
+  // ✅ Handle Logout
+  const handleLogout = () => {
+    setLoggedUser(null); // clears App.jsx state
+    alert("You have been logged out!");
+    navigate("/");
+  };
+
   return (
     <div className="navbar">
-      {/* Logo */}
       <div className="navbar-logo">Snapdeal</div>
 
-      {/* Search */}
       <div className="navbar-search-container">
         <input
           type="text"
@@ -86,25 +86,34 @@ const Navbar = () => {
         <button className="search-button">Search</button>
       </div>
 
-      {/* Right icons */}
       <div className="navbar-icons">
         <div className="navbar-icon cart">
           <FaShoppingCart /> Cart
         </div>
 
         <div className="navbar-icon signin">
-          <FaUserAlt /> 
-          {loggedUser ? loggedUser.name : "Sign In"}
-          <SignupDropdown openModal={openModal} />
-        </div>
+          <FaUserAlt />{" "}
+          {loggedUser ? (
+            <>
+              {loggedUser.name}{" "}
+              {loggedUser.role === "ADMIN" && (
+                <span className="admin-badge">Admin</span>
+              )}
+            </>
+          ) : (
+            "Sign In"
+          )}
 
-        {/* Show Admin badge if admin is logged in */}
-        {loggedUser && loggedUser.role === "ADMIN" && (
-          <div className="navbar-admin-badge">Admin</div>
-        )}
+          {/* Dropdown */}
+          <SignupDropdown
+            openModal={openModal}
+            loggedUser={loggedUser}
+            handleLogout={handleLogout}
+          />
+        </div>
       </div>
 
-      {/* Modal */}
+      {/* Modal for Login/Register */}
       <Modal
         isOpen={modalOpen}
         onClose={closeModal}

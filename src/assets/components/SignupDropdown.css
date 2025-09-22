@@ -12,7 +12,8 @@
   top: 100%;
   right: 0;
   width: 260px;
-  background-color: #2e2e2e;
+  background-color: #333333; /* default color */
+
   color: #ffffff;
   border-radius: 6px;
   padding: 12px;
@@ -36,7 +37,6 @@
 }
 
 .dropdown-link {
-  color: #333333; /* default color */
   font-size: 14px;
   font-weight: 600;
   padding: 6px 8px;
@@ -46,7 +46,7 @@
 }
 
 .dropdown-link:hover {
-  background-color: #404040; /* hover background */
+  background-color: #2e2e2e; /* hover background */
   color: #ffffff;
 }
 
@@ -107,4 +107,18 @@
     width: calc(100vw - 16px);
     left: 8px;
   }
+}
+/* src/assets/components/SignupDropdown.css */
+.logout-btn {
+  width: 100%;
+  padding: 8px;
+  background: #d1203c; /* Snapdeal red */
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+.logout-btn:hover {
+  background: #b01a30;
 }

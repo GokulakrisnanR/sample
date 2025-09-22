@@ -1,14 +1,22 @@
+// src/pages/Products.jsx
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { getAllProducts } from "../services/ProductService";
 
 const Products = () => {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    axios
-      .get("http://localhost:8080/api/products")
-      .then((res) => setProducts(res.data))
-      .catch((err) => console.error("Error fetching products:", err));
+    const fetchProducts = async () => {
+      try {
+        const data = await getAllProducts();
+        setProducts(data);
+      } catch (err) {
+        console.error("Error fetching products:", err);
+      }
+    };
+
+    fetchProducts();
   }, []);
 
   return (

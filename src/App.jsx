@@ -1,5 +1,6 @@
+// src/App.jsx
 import React, { useEffect, useState } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Home from "./pages/Home.jsx";
 import Products from "./pages/Products.jsx";
 import Cart from "./pages/Cart.jsx";
@@ -10,12 +11,12 @@ import Login from "./pages/Login.jsx";
 import Signup from "./pages/Signup.jsx";
 import axios from "axios";
 import ApiTest from "./ApiTest.jsx";
-import AdminPage from "./pages/Admin.jsx";
-
+import Admin from "./pages/Admin.jsx";
 
 const App = () => {
   const [users, setUsers] = useState([]);
   const [products, setProducts] = useState([]);
+  const [loggedUser, setLoggedUser] = useState(null); // ✅ single source of truth
 
   // Fetch users (GET)
   const fetchUsers = async () => {
@@ -56,21 +57,31 @@ const App = () => {
   return (
     <Router>
       <TopNavbar />
-      <Navbar />
+      {/* ✅ Pass loggedUser + setLoggedUser into Navbar */}
+      <Navbar loggedUser={loggedUser} setLoggedUser={setLoggedUser} />
+      
       <Routes>
-                      <Route path="/apitest" element={<ApiTest />} />
-                      <Route path="/admin" element={<AdminPage />} />
+        <Route path="/apitest" element={<ApiTest />} />
 
-        <Route
-          path="/"
-          element={<Home users={users} products={products} />}
-        />
+        {/* ✅ Protect admin route */}
+       <Route
+  path="/admin"
+  element={
+    loggedUser?.role === "ADMIN" ? (
+      <Admin handleLogout={() => setLoggedUser(null)} /> // ✅ pass handleLogout
+    ) : (
+      <Navigate to="/" replace />
+    )
+  }
+/>
+
+        <Route path="/" element={<Home users={users} products={products} />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup registerUser={registerUser} />} />
         <Route
-          path="/products"
-          element={<Products products={products} />}
+          path="/signup"
+          element={<Signup registerUser={registerUser} />}
         />
+        <Route path="/products" element={<Products products={products} />} />
         <Route path="/cart" element={<Cart />} />
       </Routes>
     </Router>
