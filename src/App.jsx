@@ -53,6 +53,11 @@ const App = () => {
       console.error("Error registering user:", error);
     }
   };
+  const handleLogout = () => {
+  setLoggedUser(null);
+  alert("Logged out successfully!");
+};
+
 
   return (
     <Router>
@@ -64,16 +69,17 @@ const App = () => {
         <Route path="/apitest" element={<ApiTest />} />
 
         {/* ✅ Protect admin route */}
-       <Route
+<Route
   path="/admin"
   element={
     loggedUser?.role === "ADMIN" ? (
-      <Admin handleLogout={() => setLoggedUser(null)} /> // ✅ pass handleLogout
+      <Admin handleLogout={handleLogout} loggedUser={loggedUser} />
     ) : (
       <Navigate to="/" replace />
     )
   }
 />
+
 
         <Route path="/" element={<Home users={users} products={products} />} />
         <Route path="/login" element={<Login />} />

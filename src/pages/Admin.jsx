@@ -2,16 +2,28 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import AdminSidebar from "../assets/components/AdminSidebar";
 
-const Admin = ({ handleLogout }) => {
+const Admin = ({ handleLogout, loggedUser }) => {
   const [users, setUsers] = useState([]);
   const [products, setProducts] = useState([]);
   const [activeSection, setActiveSection] = useState("users");
   const [editingUserId, setEditingUserId] = useState(null);
   const [editingProductId, setEditingProductId] = useState(null);
   const [userForm, setUserForm] = useState({ name: "", email: "", role: "USER" });
-  const [productForm, setProductForm] = useState({ name: "", description: "", price: "" });
+const [productForm, setProductForm] = useState({
+  name: "",
+  description: "",
+  price: "",
+  section: "featured",
+  imageUrl: ""
+});
   const [newUserForm, setNewUserForm] = useState({ name: "", email: "", role: "USER", password: "" });
-  const [newProductForm, setNewProductForm] = useState({ name: "", description: "", price: "" });
+const [newProductForm, setNewProductForm] = useState({
+  name: "",
+  description: "",
+  price: "",
+  section: "featured",
+  imageUrl: ""
+});
 
   // Fetch all users
   const fetchUsers = async () => {
@@ -72,19 +84,27 @@ const Admin = ({ handleLogout }) => {
 
   // Edit product
   const editProduct = (product) => {
-    setEditingProductId(product.id);
-    setProductForm({ name: product.name, description: product.description, price: product.price });
-  };
+  setEditingProductId(product.id);
+  setProductForm({
+    name: product.name,
+    description: product.description,
+    price: product.price,
+    section: product.section || "featured",
+    imageUrl: product.imageUrl || ""
+  });
+};
+
 
   const saveProduct = async (id) => {
-    try {
-      await axios.put(`http://localhost:8080/api/products/${id}`, productForm);
-      setEditingProductId(null);
-      fetchProducts();
-    } catch (err) {
-      console.error("Error updating product:", err);
-    }
-  };
+  try {
+    await axios.put(`http://localhost:8080/api/products/${id}`, productForm);
+    setEditingProductId(null);
+    fetchProducts();
+  } catch (err) {
+    console.error("Error updating product:", err);
+  }
+};
+
 
   // Add new user
   const addUser = async (e) => {
@@ -99,16 +119,20 @@ const Admin = ({ handleLogout }) => {
   };
 
   // Add new product
-  const addProduct = async (e) => {
-    e.preventDefault();
-    try {
-      await axios.post("http://localhost:8080/api/products", newProductForm);
-      setNewProductForm({ name: "", description: "", price: "" });
-      fetchProducts();
-    } catch (err) {
-      console.error("Error adding product:", err);
-    }
-  };
+const addProduct = async (e) => {
+  e.preventDefault();
+  try {
+    const adminId = loggedUser?.id || 1; // fallback admin ID
+    await axios.post(`http://localhost:8080/api/products/${adminId}`, newProductForm);
+    setNewProductForm({ name: "", description: "", price: "", section: "featured", imageUrl: "" });
+    fetchProducts();
+  } catch (err) {
+    console.error("Error adding product:", err);
+  }
+};
+
+
+
 
   return (
     <div style={{ display: "flex", minHeight: "100vh" }}>
@@ -230,31 +254,55 @@ const Admin = ({ handleLogout }) => {
 
             {/* Add New Product Form */}
             <form onSubmit={addProduct} style={{ marginBottom: "20px" }}>
-              <input
-                type="text"
-                placeholder="Name"
-                value={newProductForm.name}
-                onChange={(e) => setNewProductForm({ ...newProductForm, name: e.target.value })}
-                required
-              />
-              <input
-                type="text"
-                placeholder="Description"
-                value={newProductForm.description}
-                onChange={(e) =>
-                  setNewProductForm({ ...newProductForm, description: e.target.value })
-                }
-                required
-              />
-              <input
-                type="number"
-                placeholder="Price"
-                value={newProductForm.price}
-                onChange={(e) => setNewProductForm({ ...newProductForm, price: e.target.value })}
-                required
-              />
-              <button type="submit">Add Product</button>
-            </form>
+  <input
+    type="text"
+    placeholder="Name"
+    value={newProductForm.name}
+    onChange={(e) =>
+      setNewProductForm({ ...newProductForm, name: e.target.value })
+    }
+    required
+  />
+  <input
+    type="text"
+    placeholder="Description"
+    value={newProductForm.description}
+    onChange={(e) =>
+      setNewProductForm({ ...newProductForm, description: e.target.value })
+    }
+    required
+  />
+  <input
+    type="number"
+    placeholder="Price"
+    value={newProductForm.price}
+    onChange={(e) =>
+      setNewProductForm({ ...newProductForm, price: e.target.value })
+    }
+    required
+  />
+  <input
+    type="text"
+    placeholder="Image URL"
+    value={newProductForm.imageUrl}
+    onChange={(e) =>
+      setNewProductForm({ ...newProductForm, imageUrl: e.target.value })
+    }
+  />
+  <select
+    value={newProductForm.section}
+    onChange={(e) =>
+      setNewProductForm({ ...newProductForm, section: e.target.value })
+    }
+  >
+    <option value="featured">Featured</option>
+    <option value="trending">Trending</option>
+    <option value="new-arrivals">New Arrivals</option>
+  </select>
+  <button type="submit">Add Product</button>
+</form>
+
+
 
             <table border="1" cellPadding="10" cellSpacing="0">
               <thead>
@@ -271,42 +319,63 @@ const Admin = ({ handleLogout }) => {
                   <tr key={product.id}>
                     <td>{product.id}</td>
                     <td>
-                      {editingProductId === product.id ? (
-                        <input
-                          value={productForm.name}
-                          onChange={(e) =>
-                            setProductForm({ ...productForm, name: e.target.value })
-                          }
-                        />
-                      ) : (
-                        product.name
-                      )}
-                    </td>
-                    <td>
-                      {editingProductId === product.id ? (
-                        <input
-                          value={productForm.description}
-                          onChange={(e) =>
-                            setProductForm({ ...productForm, description: e.target.value })
-                          }
-                        />
-                      ) : (
-                        product.description
-                      )}
-                    </td>
-                    <td>
-                      {editingProductId === product.id ? (
-                        <input
-                          type="number"
-                          value={productForm.price}
-                          onChange={(e) =>
-                            setProductForm({ ...productForm, price: e.target.value })
-                          }
-                        />
-                      ) : (
-                        `₹${product.price}`
-                      )}
-                    </td>
+  {editingProductId === product.id ? (
+    <input
+      value={productForm.name}
+      onChange={(e) => setProductForm({ ...productForm, name: e.target.value })}
+    />
+  ) : (
+    product.name
+  )}
+</td>
+<td>
+  {editingProductId === product.id ? (
+    <input
+      value={productForm.description}
+      onChange={(e) => setProductForm({ ...productForm, description: e.target.value })}
+    />
+  ) : (
+    product.description
+  )}
+</td>
+<td>
+  {editingProductId === product.id ? (
+    <input
+      type="number"
+      value={productForm.price}
+      onChange={(e) => setProductForm({ ...productForm, price: e.target.value })}
+    />
+  ) : (
+    `₹${product.price}`
+  )}
+</td>
+<td>
+  {editingProductId === product.id ? (
+    <input
+      type="text"
+      value={productForm.imageUrl}
+      placeholder="Image URL"
+      onChange={(e) => setProductForm({ ...productForm, imageUrl: e.target.value })}
+    />
+  ) : (
+    product.imageUrl || "-"
+  )}
+</td>
+<td>
+  {editingProductId === product.id ? (
+    <select
+      value={productForm.section}
+      onChange={(e) => setProductForm({ ...productForm, section: e.target.value })}
+    >
+      <option value="featured">Featured</option>
+      <option value="trending">Trending</option>
+      <option value="new-arrivals">New Arrivals</option>
+    </select>
+  ) : (
+    product.section || "-"
+  )}
+</td>
+
                     <td>
                       {editingProductId === product.id ? (
                         <button onClick={() => saveProduct(product.id)}>Save</button>
